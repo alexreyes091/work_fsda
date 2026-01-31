@@ -1,0 +1,31 @@
+services:
+  # Database -> PostgreSQL
+  db:
+    image: postgres:18.1-alpine3.23
+    container_name: altairis_db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend -> API C# .NET 10
+  backend:
+    build: 
+      context: ./backend # Ubicación del dockerfile de la API
+      dockerfile: Dockerfile
+    container_name: altairis_api
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRING=${CONNECTION_STRING}
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+volumes:
+  postgres_data:
