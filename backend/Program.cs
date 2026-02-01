@@ -1,8 +1,15 @@
 using app.webapi.backoffice_viajes_altairis.Data;
+using app.webapi.backoffice_viajes_altairis.Data.Interfaces;
+using app.webapi.backoffice_viajes_altairis.Data.Repository;
 using app.webapi.backoffice_viajes_altairis.Domain.Validators;
+using app.webapi.backoffice_viajes_altairis.Services;
+using app.webapi.backoffice_viajes_altairis.Services.Interfaces;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Mapster;
+using MapsterMapper;
+using app.webapi.backoffice_viajes_altairis.Endpoints;
 
 DotNetEnv.Env.TraversePath().Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -14,17 +21,26 @@ builder.Services.AddOpenApi();
 builder.Services.AddValidatorsFromAssemblyContaining<RoomValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<HotelValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ReservationValidator>();
+// Repositories
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+// Services
+builder.Services.AddScoped<IHotelService, HotelService>();
 
 //Configuration db
 var connectionString = builder.Configuration["CONNECTION_STRING"];
 builder.Services.AddDbContext<AltarisDbContext>(options => options.UseNpgsql(connectionString));
+// Mapper
+builder.Services.AddSingleton<IMapper, Mapper>();
+builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.MapOpenApi();
+    app.MapOpenApi();
     app.MapScalarApiReference( options =>
     {
         options
@@ -34,5 +50,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHotelEndpoints();
 
 app.Run();

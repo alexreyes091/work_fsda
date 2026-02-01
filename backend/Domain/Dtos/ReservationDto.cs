@@ -1,10 +1,10 @@
 ﻿using app.webapi.backoffice_viajes_altairis.Domain.Enums;
+using app.webapi.backoffice_viajes_altairis.Domain.Models;
 
-namespace app.webapi.backoffice_viajes_altairis.Domain.Models
+namespace app.webapi.backoffice_viajes_altairis.Domain.Dtos
 {
-    public class Reservation
+    public class ReservationDto
     {
-        public Guid Id { get; set; }
         public Guid RoomId { get; set; }
         public string GuestFullName { get; set; } = string.Empty;
         public string GuestEmail { get; set; } = string.Empty;
@@ -14,10 +14,6 @@ namespace app.webapi.backoffice_viajes_altairis.Domain.Models
         public int Nights => (CheckOut - CheckIn).Days;
         public decimal Price { get; set; }
         public string Notes { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? CancelledAt { get; set; } = null;
-        public TypeStatusReservation StatusReservation { get; set; } = TypeStatusReservation.PENDING;
-        public Room Room { get; set; } = null!;
-
+        public TypeStatusReservation StatusReservation { get; set; }
     }
 }

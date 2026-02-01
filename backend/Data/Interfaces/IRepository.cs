@@ -1,13 +1,7 @@
-﻿namespace app.webapi.backoffice_viajes_altairis.Data.Repository
+﻿namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        /// <summary>
-        /// Asynchronously retrieves all entities of type T from the data source.
-        /// </summary>
-        /// <returns>A task that represents the asynchronous operation. The task result contains an enumerable collection of all
-        /// entities of type T. The collection will be empty if no entities are found.</returns>
-        Task<IEnumerable<T>> GetAllAsync();
         /// <summary>
         /// Returns a queryable collection of entities of type T that can be further filtered, sorted, and projected
         /// using LINQ operations.
@@ -21,10 +15,17 @@
         /// <summary>
         /// Asynchronously retrieves an entity by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the entity to retrieve. Must be a positive integer.</param>
+        /// <param name="id">The unique identifier of the entity to retrieve.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the entity of type T if found;
         /// otherwise, null.</returns>
-        Task<T> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(Guid id); 
+        /// <summary>
+        /// Asynchronously retrieves an entity by its unique identifier.
+        /// </summary>
+        /// <param name="name">The unique identifier of the entity to retrieve. Must be a positive integer.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the entity of type T if found;
+        /// otherwise, null.</returns>
+        Task<T?> GetByNameAsync(string name);
         /// <summary>
         /// Asynchronously creates a new entity in the data store.
         /// </summary>
@@ -52,7 +53,7 @@
         /// <param name="id">The unique identifier of the entity to check for existence.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains <see langword="true"/> if the
         /// entity exists; otherwise, <see langword="false"/>.</returns>
-        Task<bool> ExistAsync(int id);
+        Task<bool> ExistAsync(string name);
         /// <summary>
         /// Asynchronously saves the current changes to the underlying data store.
         /// </summary>
