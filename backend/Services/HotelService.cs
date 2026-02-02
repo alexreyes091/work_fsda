@@ -47,6 +47,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services
 
             if (await _hotelRepository.ExistAsync(hotel.Name))
                 return Result<HotelDto>.Failure("El nombre del Hotel ya existe.",TypeResultResponse.VALIDATION_ERROR.ToString());
+
             bool isSaved = await _hotelRepository.CreateAsync(hotel);
 
             return isSaved

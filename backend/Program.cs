@@ -18,6 +18,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 // Validators from FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<RoomValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<HotelValidator>();
@@ -28,6 +39,7 @@ builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 // Services
 builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 //Configuration db
 var connectionString = builder.Configuration["CONNECTION_STRING"];
@@ -52,7 +64,9 @@ if (app.Environment.IsDevelopment())
 // Aplicando migraciones y seeders
 await app.ApplyMigrationsAndSeedAsync();
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.MapHotelEndpoints();
+app.MapRoomEndpoints();
 
 app.Run();

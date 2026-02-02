@@ -1,5 +1,7 @@
 ﻿using app.webapi.backoffice_viajes_altairis.Data.Interfaces;
+using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
 using app.webapi.backoffice_viajes_altairis.Domain.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 
@@ -58,18 +60,19 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Repository
                 .FirstOrDefaultAsync(x => x.Name.ToUpper() == searchName);
         }
 
-        public async Task<(IEnumerable<Room> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<RoomDto> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize)
         {
             var query = _contextAltaris.Rooms
-                .Include(x => x.Hotel)
-                .Where(x => x.IsActive).AsNoTracking();
+                .Where(x => x.IsActive)
+                .AsNoTracking();
 
             int totalRecords = await query.CountAsync();
 
             var data = await query
-                .OrderBy(x => x.Name)
+                .OrderBy(x => x.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .ProjectToType<RoomDto>()
                 .ToListAsync();
 
             return (data, totalRecords);

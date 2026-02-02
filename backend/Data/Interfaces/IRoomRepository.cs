@@ -1,4 +1,5 @@
-﻿using app.webapi.backoffice_viajes_altairis.Domain.Models;
+﻿using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
+using app.webapi.backoffice_viajes_altairis.Domain.Models;
 
 namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
 {
@@ -11,7 +12,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
         /// <param name="pageSize">The maximum number of rooms to include in the returned page. Must be greater than 0.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a tuple with an enumerable
         /// collection of rooms for the specified page and the total number of available records.</returns>
-        Task<(IEnumerable<Room> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize);
+        Task<(IEnumerable<RoomDto> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize);
 
         /// <summary>
         /// Asynchronously retrieves all rooms associated with the specified hotel identifier.
