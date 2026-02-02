@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using app.webapi.backoffice_viajes_altairis.Data;
@@ -12,9 +13,11 @@ using app.webapi.backoffice_viajes_altairis.Data;
 namespace app.webapi.backoffice_viajes_altairis.Migrations
 {
     [DbContext(typeof(AltarisDbContext))]
-    partial class AltarisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260202000053_Se agrego campo fecha para las reservaciones cuando estas son canceladas")]
+    partial class Seagregocampofechaparalasreservacionescuandoestassoncanceladas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

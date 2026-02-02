@@ -1,15 +1,16 @@
 using app.webapi.backoffice_viajes_altairis.Data;
 using app.webapi.backoffice_viajes_altairis.Data.Interfaces;
 using app.webapi.backoffice_viajes_altairis.Data.Repository;
+using app.webapi.backoffice_viajes_altairis.Data.Seeder;
 using app.webapi.backoffice_viajes_altairis.Domain.Validators;
+using app.webapi.backoffice_viajes_altairis.Endpoints;
 using app.webapi.backoffice_viajes_altairis.Services;
 using app.webapi.backoffice_viajes_altairis.Services.Interfaces;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using Mapster;
 using MapsterMapper;
-using app.webapi.backoffice_viajes_altairis.Endpoints;
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 DotNetEnv.Env.TraversePath().Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +49,8 @@ if (app.Environment.IsDevelopment())
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
+// Aplicando migraciones y seeders
+await app.ApplyMigrationsAndSeedAsync();
 
 app.UseHttpsRedirection();
 app.MapHotelEndpoints();
