@@ -25,7 +25,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             [FromQuery] int pageSize = 10
         ){
             var result = await hotelService.GetAllHotels(pageNumber, pageSize);
-            return TypedResults.Ok(result);
+            return result.ToHttpResponse();
         }
 
         public static async Task<IResult> CreateHotel(
@@ -47,9 +47,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             string name
         ){
             var result = await hotelService.GetHotelByName(name);
-            return result.IsSuccess
-                ? TypedResults.Ok(result)
-                : TypedResults.NotFound(result);
+            return result.ToHttpResponse();
         }
     }
 }

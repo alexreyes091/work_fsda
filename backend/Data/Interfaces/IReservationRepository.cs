@@ -24,7 +24,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
         /// <param name="pageSize">The number of reservations to include in each page. Must be greater than 0.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a tuple with an enumerable
         /// collection of reservations for the specified page and the total number of reservation records for the hotel.</returns>
-        Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByHotelAsync(Guid hotelId, int numberPage, int pageSize);
+        Task<(IEnumerable<ReservationDto> reservations, int totalRecord)> GetPagedByHotelAsync(Guid hotelId, int numberPage, int pageSize);
         /// <summary>
         /// Asynchronously retrieves a paged collection of reservations that fall within the specified date range.
         /// </summary>
@@ -34,6 +34,6 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
         /// <param name="pageSize">The maximum number of reservations to include in a single page. Must be greater than 0.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a tuple with a collection of
         /// reservations for the specified page and the total number of records matching the date range.</returns>
-        Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByDateRangeAsync(DateTime startDate, DateTime endDate, int numberPage, int pageSize);
+        Task<(IEnumerable<ReservationDto> reservations, int totalRecord)> GetPagedByDateRangeAsync(DateTime startDate, DateTime endDate, int numberPage, int pageSize);
     }
 }

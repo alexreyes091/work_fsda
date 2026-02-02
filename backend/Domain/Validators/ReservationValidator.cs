@@ -20,6 +20,7 @@ namespace app.webapi.backoffice_viajes_altairis.Domain.Validators
             RuleFor(reservation => reservation.CheckIn)
                 .NotEmpty().WithMessage("La fecha de ingreso es requerido")
                 .LessThan(reservation => reservation.CheckOut).WithMessage("La fecha de ingreso debe de ser anterior a la fecha de salida.");
+            RuleFor(x => x.CheckIn).GreaterThanOrEqualTo(DateTime.UtcNow.Date);
             RuleFor(reservation => reservation.CheckOut)
                 .NotEmpty().WithMessage("La fecha de salida es requerida")
                 .GreaterThan(reservation => reservation.CheckIn).WithMessage("La fecha de salida debe de ser posterior a la fecha de entrada");

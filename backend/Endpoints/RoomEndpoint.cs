@@ -1,4 +1,5 @@
-﻿using app.webapi.backoffice_viajes_altairis.Common.Enum;
+﻿using app.webapi.backoffice_viajes_altairis.Common;
+using app.webapi.backoffice_viajes_altairis.Common.Enum;
 using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
 using app.webapi.backoffice_viajes_altairis.Services;
 using app.webapi.backoffice_viajes_altairis.Services.Interfaces;
@@ -23,7 +24,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             [FromQuery] int pageSize = 5
         ){
             var result = await roomService.GetAllRooms(pageNumber, pageSize);
-            return TypedResults.Ok(result);
+            return result.ToHttpResponse();
         }
 
         public static async Task<IResult> CreateRoom(
@@ -32,10 +33,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
         ){
             var result = await roomService.CreateRoom(roomDto);
 
-            if (!result.IsSuccess)
-                return result.ErrorType == Common.Enum.TypeResultResponse.VALIDATION_ERROR.ToString()
-                    ? TypedResults.BadRequest(result)
-                    : TypedResults.StatusCode(500);
+            if (!result.IsSuccess) return result.ToHttpResponse();
 
             return TypedResults.CreatedAtRoute(result, "GetRoomByName", new { name = result.Data.Name });
         }
@@ -45,8 +43,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             string name
         ){
             var result = await roomService.GetAllRoomsByHotelName(name);
-
-            return TypedResults.Ok(result);
+            return result.ToHttpResponse();
         }
     }
 }

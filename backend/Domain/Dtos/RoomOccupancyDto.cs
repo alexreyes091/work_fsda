@@ -2,10 +2,10 @@
 {
     public class RoomOccupancyDto
     {
-        public Guid Id { get; set; }
-        public Guid RoomId { get; set; }
-        public string RoomName { get; set; } = string.Empty;
         public DateTime Date { get; set; }
+        public string RoomName { get; set; } = string.Empty;
         public int OccupiedCount { get; set; }
+        public int TotalRooms { get; set; } 
+        public bool IsFull => OccupiedCount >= TotalRooms;
     }
 }

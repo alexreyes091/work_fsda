@@ -80,7 +80,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Repository
         public Task<bool> ExistAsync(string name) => Task.FromResult(false);
         public Task<Reservation?> GetByNameAsync(string name) => Task.FromResult<Reservation?>(null);
 
-        public async Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByHotelAsync(Guid hotelId, int numberPage, int pageSize)
+        public async Task<(IEnumerable<ReservationDto> reservations, int totalRecord)> GetPagedByHotelAsync(Guid hotelId, int numberPage, int pageSize)
         {
             var query = _contextAltaris.Reservations
                 .Include(r => r.Room)
@@ -93,15 +93,18 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Repository
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((numberPage - 1) * pageSize)
                 .Take(pageSize)
+                .ProjectToType<ReservationDto>()
                 .ToListAsync();
 
             return (reservations, totalRecord);
         }
 
-        public async Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByDateRangeAsync(DateTime startDate, DateTime endDate, int numberPage, int pageSize)
+        public async Task<(IEnumerable<ReservationDto> reservations, int totalRecord)> GetPagedByDateRangeAsync(DateTime startDate, DateTime endDate, int numberPage, int pageSize)
         {
             var query = _contextAltaris.Reservations
-                .Where(r => r.CheckIn < endDate && r.CheckOut > startDate)
+                .Where(r => r.CheckIn > startDate && r.CheckOut <= endDate)
+                .Include(r => r.Room)
+                .ThenInclude(h => h.Hotel)
                 .AsNoTracking();
 
             int totalRecord = await query.CountAsync();
@@ -110,6 +113,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Repository
                 .OrderBy(r => r.CheckIn)
                 .Skip((numberPage - 1) * pageSize)
                 .Take(pageSize)
+                .ProjectToType<ReservationDto>()
                 .ToListAsync();
 
             return (reservations, totalRecord);

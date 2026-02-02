@@ -1,4 +1,5 @@
 ﻿using app.webapi.backoffice_viajes_altairis.Common;
+using app.webapi.backoffice_viajes_altairis.Common.Enum;
 using app.webapi.backoffice_viajes_altairis.Data.Interfaces;
 using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
 using app.webapi.backoffice_viajes_altairis.Domain.Models;
@@ -12,21 +13,29 @@ namespace app.webapi.backoffice_viajes_altairis.Services
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IRoomOccupancyService _occupancyService;
         private readonly ReservationValidator _reservationValidator;
         private readonly IMapper _mapper;
 
-        public ReservationService(IReservationRepository reservationRepository,IRoomRepository roomRepository, ReservationValidator reservationValidator, IMapper mapper)
-        {
+        public ReservationService(
+            IReservationRepository reservationRepository,
+            IRoomRepository roomRepository, 
+            IRoomOccupancyService occupancyService ,
+            ReservationValidator reservationValidator, 
+            IMapper mapper
+        ){
             _reservationRepository = reservationRepository;
             _reservationValidator = reservationValidator;
+            _occupancyService = occupancyService;
             _roomRepository = roomRepository;
             _mapper = mapper;
         }
         public async Task<Result<ReservationDto>> CreateReservation(CreateReservationDto dataReservation)
         {
             Reservation reservationData = _mapper.Map<Reservation>(dataReservation);
+            const int INCREMENT_VALUE = 1;
 
-            //TODO: Completar todas las validaciones de la reservación
+            //TODO: Completar todas las validaciones de la reservación dentro del fluentValidation
             var validationResult = _reservationValidator.Validate(reservationData);
             if(!validationResult.IsValid)
             {
@@ -34,14 +43,35 @@ namespace app.webapi.backoffice_viajes_altairis.Services
                 return Result<ReservationDto>.Failure($"Validación fallida: {errors}", "ValidationError");
             }
 
-            // TODO: Verificar disponibilidad de la habitación para las fechas dadas
-            // TODO: Actualizar disponibilidad de la habitación
+            // Se valida la disponibilidad de la habitación
+            bool isRoomAvailable = await _occupancyService.IsAvailableAsync(
+                reservationData.RoomId, 
+                reservationData.CheckIn, 
+                reservationData.CheckOut
+            );
 
+            if( !isRoomAvailable )
+                return Result<ReservationDto>.Failure(
+                    "Lo sentimos, no hay cupo disponible para este tipo de habitación en las fechas seleccionadas.", 
+                    TypeResultResponse.VALIDATION_ERROR.ToString());
+
+            // Actualizar/Creamos disponibilidad/reserva de la habitación
             bool isSaved = await _reservationRepository.CreateAsync(reservationData);
 
-            return isSaved
-                ? Result<ReservationDto>.Success(_mapper.Map<ReservationDto>(reservationData))
-                : Result<ReservationDto>.Failure("No se pudo crear la reservación", "CreationError");
+            if (isSaved)
+            {
+                await _occupancyService.UpdateInventoryAsync(
+                    reservationData.RoomId,
+                    reservationData.CheckIn,
+                    reservationData.CheckOut, 
+                    INCREMENT_VALUE);
+
+                return Result<ReservationDto>.Success(_mapper.Map<ReservationDto>(reservationData));
+            }
+
+            return Result<ReservationDto>.Failure(
+                "Error al crear la reservación. Por favor, inténtelo de nuevo más tarde.",
+                TypeResultResponse.ERROR_EXCEPTION.ToString());
         }
 
         public async Task<PagedResult<ReservationDto>> GetAllReservation(int numberPage, int pageSize)
@@ -54,9 +84,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services
         public async Task<PagedResult<ReservationDto>> GetAllReservationByHotel(Guid hotelId, int numberPage, int pageSize)
         {
             var (reservations, totalRecord) = await _reservationRepository.GetPagedByHotelAsync(hotelId, numberPage, pageSize);
-            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
-
-            return PagedResult<ReservationDto>.Success(reservationDtos, totalRecord, numberPage, pageSize);
+            return PagedResult<ReservationDto>.Success(reservations, totalRecord, numberPage, pageSize);
         }
 
         public async Task<PagedResult<ReservationDto>> GetReservationByRangeDate(string startDate, string endDate, int numberPage, int pageSize)
@@ -66,9 +94,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services
 
             var (reservations, totalRecord) = await _reservationRepository.GetPagedByDateRangeAsync(start, end, numberPage, pageSize);
 
-            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
-
-            return PagedResult<ReservationDto>.Success(reservationDtos, totalRecord, numberPage, pageSize);
+            return PagedResult<ReservationDto>.Success(reservations, totalRecord, numberPage, pageSize);
         }
     }
 }
