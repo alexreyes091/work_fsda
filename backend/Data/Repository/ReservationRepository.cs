@@ -76,5 +76,40 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Repository
         }
         public Task<bool> ExistAsync(string name) => Task.FromResult(false);
         public Task<Reservation?> GetByNameAsync(string name) => Task.FromResult<Reservation?>(null);
+
+        public async Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByHotelAsync(Guid hotelId, int numberPage, int pageSize)
+        {
+            var query = _contextAltaris.Reservations
+                .Include(r => r.Room)
+                .Where(r => r.Room.HotelId == hotelId)
+                .AsNoTracking();
+
+            int totalRecord = await query.CountAsync();
+
+            var reservations = await query
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip((numberPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (reservations, totalRecord);
+        }
+
+        public async Task<(IEnumerable<Reservation> reservations, int totalRecord)> GetPagedByDateRangeAsync(DateTime startDate, DateTime endDate, int numberPage, int pageSize)
+        {
+            var query = _contextAltaris.Reservations
+                .Where(r => r.CheckIn < endDate && r.CheckOut > startDate)
+                .AsNoTracking();
+
+            int totalRecord = await query.CountAsync();
+
+            var reservations = await query
+                .OrderBy(r => r.CheckIn)
+                .Skip((numberPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (reservations, totalRecord);
+        }
     }
 }

@@ -40,6 +40,7 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 // Services
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 //Configuration db
 var connectionString = builder.Configuration["CONNECTION_STRING"];
