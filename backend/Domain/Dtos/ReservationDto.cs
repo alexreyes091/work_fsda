@@ -5,7 +5,7 @@ namespace app.webapi.backoffice_viajes_altairis.Domain.Dtos
     public class ReservationDto
     {
         public string RoomName { get; set; } = string.Empty;
-        public string HotelName { get; set; } = string.Empty;
+        public string RoomHotelName { get; set; } = string.Empty;
         public string GuestFullName { get; set; } = string.Empty;
         public string GuestEmail { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;

@@ -69,5 +69,5 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.MapHotelEndpoints();
 app.MapRoomEndpoints();
-
+app.MapReservationEndpoints();
 app.Run();

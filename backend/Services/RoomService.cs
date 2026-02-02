@@ -2,7 +2,6 @@
 using app.webapi.backoffice_viajes_altairis.Common.Enum;
 using app.webapi.backoffice_viajes_altairis.Data.Interfaces;
 using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
-using app.webapi.backoffice_viajes_altairis.Domain.Enums;
 using app.webapi.backoffice_viajes_altairis.Domain.Models;
 using app.webapi.backoffice_viajes_altairis.Domain.Validators;
 using app.webapi.backoffice_viajes_altairis.Services.Interfaces;

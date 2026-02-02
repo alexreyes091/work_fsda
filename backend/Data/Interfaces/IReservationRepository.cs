@@ -1,4 +1,5 @@
-﻿using app.webapi.backoffice_viajes_altairis.Domain.Models;
+﻿using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
+using app.webapi.backoffice_viajes_altairis.Domain.Models;
 
 namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
 {
@@ -14,7 +15,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
         /// <param name="date">The reservation date to filter by. If null, reservations from all dates are included.</param>
         /// <returns>A task that represents the asynchronous operation. The result contains a tuple with an enumerable collection
         /// of reservations for the specified page and the total number of matching reservations.</returns>
-        Task<(IEnumerable<Reservation> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize, Guid? hotelId = null, DateTime? date = null);
+        Task<(IEnumerable<ReservationDto> Data, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize, Guid? hotelId = null, DateTime? date = null);
         /// <summary>
         /// Asynchronously retrieves a paged list of reservations for the specified hotel.
         /// </summary>

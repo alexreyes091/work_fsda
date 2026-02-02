@@ -47,9 +47,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services
         public async Task<PagedResult<ReservationDto>> GetAllReservation(int numberPage, int pageSize)
         {
             var (reservation, totalRecord) = await _reservationRepository.GetPagedAsync(numberPage, pageSize);
-            IEnumerable<ReservationDto> reservationDto = _mapper.Map<IEnumerable<ReservationDto>>(reservation);
-
-            return PagedResult<ReservationDto>.Success(reservationDto, totalRecord, numberPage, pageSize);
+            return PagedResult<ReservationDto>.Success(reservation, totalRecord, numberPage, pageSize);
 
         }
 
