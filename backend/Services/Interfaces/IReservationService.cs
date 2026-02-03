@@ -1,4 +1,4 @@
-﻿using app.webapi.backoffice_viajes_altairis.Common;
+using app.webapi.backoffice_viajes_altairis.Common;
 using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
 using app.webapi.backoffice_viajes_altairis.Domain.Models;
 
@@ -40,5 +40,11 @@ namespace app.webapi.backoffice_viajes_altairis.Services.Interfaces
         /// <returns>A task that represents the asynchronous operation. The task result contains a Result object with the created
         /// reservation details if successful; otherwise, contains error information.</returns>
         public Task<Result<ReservationDto>> CreateReservation(CreateReservationDto dataReservation);
+        /// <summary>
+        /// Retrieves dashboard statistics including hotel, room, and reservation metrics.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a Result object with dashboard
+        /// statistics if successful; otherwise, contains error information.</returns>
+        public Task<Result<DashboardStatsDto>> GetDashboardStats();
     }
 }

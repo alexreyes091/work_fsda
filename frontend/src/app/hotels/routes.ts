@@ -18,6 +18,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages').then(m => m.Hotels),
             },
             {
+                path:'reservations',
+                loadComponent: () => import('./pages').then(m => m.Reservations),
+            },
+            {
                 path:'occupancy',
                 loadComponent: () => import('./pages').then(m => m.RoomOccupancy),
             },

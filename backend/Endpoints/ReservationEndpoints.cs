@@ -1,4 +1,4 @@
-﻿using app.webapi.backoffice_viajes_altairis.Common;
+using app.webapi.backoffice_viajes_altairis.Common;
 using app.webapi.backoffice_viajes_altairis.Domain.Dtos;
 using app.webapi.backoffice_viajes_altairis.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +13,7 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             RouteGroupBuilder group = routes.MapGroup("api/v1/reservation").WithTags("Reservations");
 
             group.MapGet("/all", GetAllReservation);
+            group.MapGet("/dashboard-stats", GetDashboardStats);
             group.MapGet("/byHotelId/{id:guid}", GetAllReservationByHotel);
             group.MapGet("/byRange", GetAllReservationByRangeDate);
             group.MapPost("/create", CreateReservation).WithName("GetReservationById");
@@ -47,6 +48,14 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
             [FromQuery] int pageSize = 5
         ){
             var result = await reservationService.GetAllReservation(pageNumber, pageSize);
+
+            return result.ToHttpResponse();
+        }
+
+        public static async Task<IResult> GetDashboardStats(
+            [FromServices] IReservationService reservationService
+        ){
+            var result = await reservationService.GetDashboardStats();
 
             return result.ToHttpResponse();
         }

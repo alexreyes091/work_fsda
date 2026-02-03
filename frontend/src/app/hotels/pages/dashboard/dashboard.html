@@ -1,1 +1,302 @@
-Dashboard
+<div class="p-6 space-y-6">
+  <!-- Loading State with Skeleton -->
+  @if (isLoading()) {
+    <!-- Skeleton Stats Grid - Top Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      @for (item of [1,2,3,4]; track item) {
+        <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200 animate-pulse">
+          <div class="stat-figure">
+            <div class="skeleton h-8 w-8 rounded-full"></div>
+          </div>
+          <div class="skeleton h-4 w-24 mb-2"></div>
+          <div class="skeleton h-10 w-16 mb-2"></div>
+          <div class="skeleton h-3 w-32"></div>
+        </div>
+      }
+    </div>
+
+    <!-- Skeleton Stats Grid - Bottom Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      @for (item of [1,2,3,4]; track item) {
+        <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200 animate-pulse">
+          <div class="stat-figure">
+            <div class="skeleton h-7 w-7 rounded-full"></div>
+          </div>
+          <div class="skeleton h-4 w-28 mb-2"></div>
+          <div class="skeleton h-8 w-20"></div>
+        </div>
+      }
+    </div>
+
+    <!-- Skeleton Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Skeleton Reservas Recientes -->
+      <div class="lg:col-span-2 bg-base-100 rounded-xl shadow-sm border border-base-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="skeleton h-6 w-48"></div>
+          <div class="skeleton h-8 w-24"></div>
+        </div>
+        
+        <div class="space-y-3">
+          @for (row of [1,2,3,4,5]; track row) {
+            <div class="flex items-center gap-4 p-3 border border-base-200 rounded-lg animate-pulse">
+              <div class="skeleton h-10 w-10 rounded-full shrink-0"></div>
+              <div class="flex-1 space-y-2">
+                <div class="skeleton h-4 w-full"></div>
+                <div class="skeleton h-3 w-3/4"></div>
+              </div>
+              <div class="skeleton h-6 w-20"></div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Skeleton Ocupación por Hotel -->
+      <div class="bg-base-100 rounded-xl shadow-sm border border-base-200 p-6">
+        <div class="skeleton h-6 w-48 mb-4"></div>
+        
+        <div class="space-y-4">
+          @for (hotel of [1,2,3,4,5,6]; track hotel) {
+            <div class="space-y-2 animate-pulse">
+              <div class="flex justify-between items-center">
+                <div class="space-y-2">
+                  <div class="skeleton h-4 w-32"></div>
+                  <div class="skeleton h-3 w-20"></div>
+                </div>
+                <div class="space-y-2 text-right">
+                  <div class="skeleton h-5 w-12 ml-auto"></div>
+                  <div class="skeleton h-3 w-16 ml-auto"></div>
+                </div>
+              </div>
+              <div class="skeleton h-2 w-full rounded-full"></div>
+            </div>
+          }
+        </div>
+        
+        <div class="mt-6">
+          <div class="skeleton h-8 w-full"></div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Stats Grid - Top Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Total Hoteles -->
+      <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200">
+        <div class="stat-figure text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M6 3v18"/><path d="M18 3v18"/><path d="M6 3h12"/></svg>
+        </div>
+        <div class="stat-title">Total Hoteles</div>
+        <div class="stat-value text-primary">{{ stats().totalHotels }}</div>
+        <div class="stat-desc">en todos los destinos</div>
+      </div>
+
+      <!-- Habitaciones Totales -->
+      <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200">
+        <div class="stat-figure text-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M9 7v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V7"/></svg>
+        </div>
+        <div class="stat-title">Habitaciones Totales</div>
+        <div class="stat-value text-secondary">{{ stats().totalRooms }}</div>
+        <div class="stat-desc">en todos los hoteles</div>
+      </div>
+
+      <!-- Reservas Activas -->
+      <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200">
+        <div class="stat-figure text-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+        </div>
+        <div class="stat-title">Reservas Activas</div>
+        <div class="stat-value text-success">{{ stats().activeReservations }}</div>
+        <div class="stat-desc text-success">
+          @if (stats().activeReservations > 50) {
+            ↗︎ Alto volumen
+          } @else {
+            Normal
+          }
+        </div>
+      </div>
+
+      <!-- Tasa de Ocupación -->
+      <div class="stat bg-base-100 shadow-sm rounded-xl border border-base-200">
+        <div class="stat-figure text-info">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        </div>
+        <div class="stat-title">Tasa de Ocupación</div>
+        <div class="stat-value text-info">{{ stats().occupancyRate }}%</div>
+        <div class="stat-desc">
+          @if (stats().occupancyRate >= 80) {
+            <span class="text-success">↗︎ +5% promedio</span>
+          } @else if (stats().occupancyRate >= 50) {
+            <span class="text-warning">promedio</span>
+          } @else {
+            <span class="text-error">↘︎ -3% vs anterior</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid - Bottom Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Check-ins Hoy -->
+      <div class="stat bg-gradient-to-br from-success/10 to-success/5 shadow-sm rounded-xl border border-success/20">
+        <div class="stat-figure text-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+        <div class="stat-title">Check-ins Hoy</div>
+        <div class="stat-value text-2xl">{{ stats().checkInsToday }}</div>
+      </div>
+
+      <!-- Check-outs Hoy -->
+      <div class="stat bg-gradient-to-br from-info/10 to-info/5 shadow-sm rounded-xl border border-info/20">
+        <div class="stat-figure text-info">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        </div>
+        <div class="stat-title">Check-outs Hoy</div>
+        <div class="stat-value text-2xl">{{ stats().checkOutsToday }}</div>
+      </div>
+
+      <!-- Reservas Pendientes -->
+      <div class="stat bg-gradient-to-br from-warning/10 to-warning/5 shadow-sm rounded-xl border border-warning/20">
+        <div class="stat-figure text-warning">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-title">Reservas Pendientes</div>
+        <div class="stat-value text-2xl">{{ stats().pendingReservations }}</div>
+      </div>
+
+      <!-- Ingresos del Mes -->
+      <div class="stat bg-gradient-to-br from-primary/10 to-primary/5 shadow-sm rounded-xl border border-primary/20">
+        <div class="stat-figure text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-title">Ingresos del Mes</div>
+        <div class="stat-value text-2xl">{{ formatCurrency(stats().monthlyRevenue) }}</div>
+        <div class="stat-desc text-success">↗︎ +15% vs mes anterior</div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Reservas Recientes - 2 columns -->
+      <div class="lg:col-span-2 bg-base-100 rounded-xl shadow-sm border border-base-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Reservas Recientes
+          </h2>
+          <button class="btn btn-ghost btn-sm">Ver todas</button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Huésped</th>
+                <th>Hotel</th>
+                <th>Habitación</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (reservation of recentReservations(); track reservation.guestEmail) {
+                <tr class="hover">
+                  <td>
+                    <span class="font-mono text-xs">{{ reservation.id?.substring(0, 8) || 'N/A' }}</span>
+                  </td>
+                  <td>
+                    <div class="flex items-center gap-3">
+                      <div class="avatar placeholder">
+                        <div class="bg-neutral text-neutral-content rounded-full w-10">
+                          <span class="text-sm justify-center mt-2 flex">{{ getInitials(reservation.guestFullName) }}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-bold text-sm">{{ reservation.guestFullName }}</div>
+                        <div class="text-xs opacity-50">{{ reservation.guestEmail }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-sm">{{ reservation.roomHotelName }}</td>
+                  <td class="text-sm">{{ reservation.roomName }}</td>
+                  <td class="text-sm">{{ formatDate(reservation.checkIn) }}</td>
+                  <td class="text-sm">{{ formatDate(reservation.checkOut) }}</td>
+                  <td>
+                    <span [class]="'badge badge-sm ' + getStatusBadgeClass(reservation.statusReservation)">
+                      {{ getStatusLabel(reservation.statusReservation) }}
+                    </span>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" class="text-center py-8 text-base-content/50">
+                    No hay reservas recientes
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ocupación por Hotel - 1 column -->
+      <div class="bg-base-100 rounded-xl shadow-sm border border-base-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            Ocupación por Hotel (Hoy)
+          </h2>
+          @if (hasMoreHotels()) {
+            <span class="badge badge-neutral badge-sm">Top 8</span>
+          }
+        </div>
+
+        <div class="space-y-4">
+          @for (hotel of topHotelOccupancy(); track hotel.hotelName) {
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-sm">{{ hotel.hotelName }}</p>
+                  <p class="text-xs text-base-content/60">{{ hotel.location }}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold text-lg" 
+                     [class.text-success]="hotel.occupancyRate <= 40"
+                     [class.text-warning]="hotel.occupancyRate > 40 && hotel.occupancyRate <= 70"
+                     [class.text-error]="hotel.occupancyRate > 70">
+                    {{ hotel.occupancyRate }}%
+                  </p>
+                  <p class="text-xs text-base-content/60">{{ hotel.occupiedRooms }}/{{ hotel.totalRooms }}</p>
+                </div>
+              </div>
+              <progress 
+                class="progress w-full"
+                [class.progress-success]="hotel.occupancyRate <= 40"
+                [class.progress-warning]="hotel.occupancyRate > 40 && hotel.occupancyRate <= 70"
+                [class.progress-error]="hotel.occupancyRate > 70"
+                [value]="hotel.occupancyRate" 
+                max="100">
+              </progress>
+            </div>
+          } @empty {
+            <div class="text-center py-8 text-base-content/50">
+              <p>No hay datos de ocupación disponibles</p>
+            </div>
+          }
+        </div>
+
+        @if (hasMoreHotels()) {
+          <div class="mt-6">
+            <button class="btn btn-outline btn-sm w-full">
+              Ver más hoteles
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

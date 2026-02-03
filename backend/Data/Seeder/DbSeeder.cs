@@ -102,12 +102,12 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Seeder
                 hotels.Add(hotel);
 
                 // --- Generación de Reservas ---
-                var numReservations = random.Next(15, 51);
+                var numReservations = random.Next(40, 91);
                 for (int k = 0; k < numReservations; k++)
                 {
                     var randomRoom = hotel.Rooms[random.Next(hotel.Rooms.Count)];
-                    var checkIn = DateTime.UtcNow.AddDays(random.Next(-90, 91));
-                    int nights = random.Next(1, 6);
+                    var checkIn = DateTime.UtcNow.AddDays(random.Next(-20, 41));
+                    int nights = random.Next(3, 8);
                     var checkOut = checkIn.AddDays(nights);
 
                     TypeStatusReservation assignedStatus;
@@ -140,9 +140,30 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Seeder
                 }
             }
 
+            // --- MOTOR DE OCUPACIÓN AJUSTADO PARA ALTA DISPONIBILIDAD ---
+            Console.WriteLine("--> CALCULANDO OCUPACIÓN POR DÍA...");
+            
+            // Creamos un diccionario de habitaciones para acceso rápido y coherencia de stock
+            var roomLookup = hotels.SelectMany(h => h.Rooms).ToDictionary(r => r.Id);
+
+            var occupancyData = allReservations
+                .Where(r => r.StatusReservation != TypeStatusReservation.CANCELLED)
+                .SelectMany(r => Enumerable.Range(0, (r.CheckOut - r.CheckIn).Days)
+                    .Select(offset => new { r.RoomId, Date = r.CheckIn.AddDays(offset).Date }))
+                .GroupBy(x => new { x.RoomId, x.Date })
+                .Select(g => new RoomOccupancy
+                {
+                    Id = Guid.NewGuid(),
+                    RoomId = g.Key.RoomId,
+                    Date = g.Key.Date,
+                    // Alta disponibilidad: permitimos que se vea la ocupación real según tus reservas
+                    OccupiedCount = g.Count() 
+                }).ToList();
+
             // Inserción masiva para optimizar rendimiento
             await context.Hotels.AddRangeAsync(hotels);
             await context.Reservations.AddRangeAsync(allReservations);
+            await context.RoomOccupancies.AddRangeAsync(occupancyData);
             await context.SaveChangesAsync();
         }
     }
