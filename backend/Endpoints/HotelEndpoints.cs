@@ -21,10 +21,10 @@ namespace app.webapi.backoffice_viajes_altairis.Endpoints
 
         public static async Task<IResult> GetAllHotels(
             [FromServices] IHotelService hotelService,
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10
+            [FromQuery] int page = 1,
+            [FromQuery] int size= 10
         ){
-            var result = await hotelService.GetAllHotels(pageNumber, pageSize);
+            var result = await hotelService.GetAllHotels(page, size);
             return result.ToHttpResponse();
         }
 

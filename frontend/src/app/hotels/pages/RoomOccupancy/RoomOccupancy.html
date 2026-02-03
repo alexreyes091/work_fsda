@@ -1,0 +1,25 @@
+<!-- Header Tittle -->
+<div class="mb-4">
+    <h1 class="font-bold text-2xl">Disponibilidad de Habitaciones</h1>
+    <p class="label text-sm">Visualiza y gestiona la ocupacion de habitaciones con el mapa de calor</p>
+</div>
+
+<section class="flex gap-2">
+    <div class="w-full ">
+        <app-heat-map 
+            [viewDate]="viewDate()"
+            [occupancyData]="occupancyData()"
+            [dataHotels]="dataHotels()"
+            [(selectedHotelId)]="selectedHotelId"
+            (nextMonth)="onNextMonth()"
+            (previousMonth)="onPreviousMonth()"
+            (selectDay)="onSelectDay($event)"
+        />
+    </div>
+    <!-- <div class="w-full lg:w-2/5 flex flex-col gap-4">
+        <app-room-type-detail 
+            [hotelId]="selectedHotelId()" 
+            [startDate]="viewDate()" 
+        />
+    </div> -->
+</section>

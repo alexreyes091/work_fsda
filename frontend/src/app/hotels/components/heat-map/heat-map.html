@@ -1,0 +1,57 @@
+<main class="bg-base-100 p-6 rounded-xl shadow-sm border border-base-200">
+    <div class="flex flex-row gap-3 text-slate-800 mb-4 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-flame"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 2c0 -.88 1.056 -1.331 1.692 -.722c1.958 1.876 3.096 5.995 1.75 9.12l-.08 .174l.012 .003c.625 .133 1.203 -.43 2.303 -2.173l.14 -.224a1 1 0 0 1 1.582 -.153c1.334 1.435 2.601 4.377 2.601 6.27c0 4.265 -3.591 7.705 -8 7.705s-8 -3.44 -8 -7.706c0 -2.252 1.022 -4.716 2.632 -6.301l.605 -.589c.241 -.236 .434 -.43 .618 -.624c1.43 -1.512 2.145 -2.924 2.145 -4.78" /></svg>
+        <p class="flex flex-col gap-0">
+            <span class="font-bold">Mapa de Calor por Ocupación</span>
+            <legend class="text-sm italic m-0 p-0">Visualiza rapidamente la ocupacion con colores: verde (baja) a rojo (alta)</legend>
+        </p>
+    </div>
+    <hr class="my-4 opacity-15">
+    <div class="flex justify-between items-center mb-8">
+        <div class="flex items-center gap-4">
+        <button (click)="this.previousMonth.emit()" class="btn btn-circle btn-ghost btn-sm border border-base-300">❮</button>
+        <h2 class="text-xl font-bold capitalize">{{ viewDate() | date: 'MMMM yyyy' }}</h2>
+        <button (click)="this.nextMonth.emit()" class="btn btn-circle btn-ghost btn-sm border border-base-300">❯</button>
+        </div>
+
+        <select class="select select-bordered select-sm w-full max-w-xs bg-base-100">
+            <option disabled selected>Selecciona un Hotel</option>
+            @for (hotel of dataHotels(); track hotel.id) {
+                <option 
+                    [value]="hotel.id" 
+                    (click)="selectedHotelId.set(hotel.id)"
+                    [selected]="hotel.id === selectedHotelId()"
+                >
+                    {{ hotel.name }}
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="grid grid-cols-7 gap-2 mb-2">
+        @for (day of ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']; track day) {
+        <div class="text-center text-xs font-medium opacity-50 py-2">{{day}}</div>
+        }
+    </div>
+
+    <div class="grid grid-cols-7 gap-2">
+        @for (item of calendarDays(); track item.date) {
+        <div 
+            (click)="this.selectDay.emit(item)"
+            [class]="getHeatmapClass(item)"
+            class="relative aspect-square rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105 border-2"
+            [class.border-primary]="item.isSelected"
+            [class.border-transparent]="!item.isSelected"
+            [class.opacity-20]="!item.isCurrentMonth"
+            [class.tooltip]="item.isCurrentMonth && item.total > 0"
+            [class.tooltip-top]="item.isCurrentMonth && item.total > 0"
+            [attr.data-tip]="getTooltipText(item)">
+            
+            <span class="text-lg font-bold">{{ item.date.getDate() }}</span>
+            @if (item.isCurrentMonth) {
+                <span class="text-[10px] opacity-70 font-semibold">{{ item.percentage }}%</span>
+            }
+        </div>
+        }
+    </div>
+</main>

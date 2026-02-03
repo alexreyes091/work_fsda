@@ -12,4 +12,11 @@
     </button>
 </section>
 
-<app-smart-table [data]="hotelsList()" [columns]="columns" />
+<app-smart-table 
+    [data]="hotelsList()" 
+    [columns]="columns"
+    [totalCount]="totalCount()" 
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    (onPageChange)="onTablePageChange($event)">
+</app-smart-table>

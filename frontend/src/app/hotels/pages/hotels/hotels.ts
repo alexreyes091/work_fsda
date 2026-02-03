@@ -22,6 +22,9 @@ export class Hotels implements OnInit {
   // Signals
   hotelsList = signal<IHotel[]>([]);
   isLoading = signal(false);
+  totalCount = signal(0); 
+  currentPage = signal(1);
+  pageSize = signal(10);
 
   async ngOnInit(){
     this.uiService.setTitle('Gestión de Hoteles');
@@ -56,24 +59,37 @@ columns: ColumnDef<IHotel>[] = [
   {
     id: 'actions',
     header: 'Acciones',
-    cell: info => info.row.original 
+    cell: info => {
+      const hotel = info.row.original;
+      return `...`; // Placeholder para acciones, TODO: Reemplazar con botones reales en la plantilla
+    }
   }
 ];
 
-  async loadHotels() {
+  // Cargar hoteles desde el servicio, por cada página
+  async loadHotels(page: number = 1, size: number = 10) {
     try {
       this.isLoading.set(true);
-
-      const response = await this.hotelService.getAll();
+      const response = await this.hotelService.getAll(page, size);
       
       if (response.isSuccess) {
-        this.hotelsList.set(response.data);
+        this.hotelsList.set([...response.data]);
+        
+        if (response.pagination) 
+          this.totalCount.set(response.pagination.totalCount);
       }
     } catch (error) {
-      console.error('Error en Altairis:', error);
+      console.error('❌ Error en Altairis:', error);
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  // Manejar cambios de paginación desde SmartTable
+  async onTablePageChange(event: { page: number, size: number }) {
+    this.currentPage.set(event.page);
+    this.pageSize.set(event.size);
+    await this.loadHotels(event.page, event.size);
   }
 
   handleEdit(hotel: any) {

@@ -21,11 +21,11 @@ public class RoomOccupancyRepository : IRoomOccupancyRepository
                         && x.OccupiedCount >= maxCapacity);
     }
 
-    public async Task<IEnumerable<RoomOccupancy>> GetByRangeAsync(Guid roomId, DateTime startDate, DateTime endDate)
+    public async Task<IEnumerable<RoomOccupancy>> GetByRangeAsync(IEnumerable<Guid> roomIds, DateTime startDate, DateTime endDate)
     {
         return await _context.RoomOccupancies
             .Where(x => 
-                x.RoomId == roomId && 
+                roomIds.Contains(x.RoomId) && 
                 x.Date >= startDate && 
                 x.Date <= endDate)
             .OrderBy(x => x.Date)

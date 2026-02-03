@@ -1,11 +1,9 @@
-import { Component, input, signal, computed } from '@angular/core';
+import { Component, input, output, computed, effect } from '@angular/core';
 import { 
   getCoreRowModel, 
-  getFilteredRowModel, 
   createAngularTable, 
   FlexRenderDirective,
   ColumnDef,
-  getPaginationRowModel
 } from '@tanstack/angular-table';
 
 @Component({
@@ -15,35 +13,58 @@ import {
   templateUrl: './smart-table.html',
 })
 export class SmartTable { 
-  // Signals
-  filterText = signal(''); 
-  data = input.required<any[]>();
+  // Exponer Math para usar en el template
+  Math = Math;
+  
+  // Signals para inputs
+  data = input<any[]>([]);
   columns = input.required<ColumnDef<any, any>[]>();
-
-  // Configuración de TanStack
+  totalCount = input<number>(0);
+  currentPage = input<number>(1);
+  pageSize = input<number>(10);
+  
+  // Outputs
+  onPageChange = output<{ page: number, size: number }>();
+  
+  // Computed para cálculos de paginación
+  totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
+  canPreviousPage = computed(() => this.currentPage() > 1);
+  canNextPage = computed(() => this.currentPage() < this.totalPages());
+  
+  // Tabla TanStack - SOLO para renderizado - (sin paginación del lado del cliente)
   table = createAngularTable(() => ({
     data: this.data(),
     columns: this.columns(),
-    state: {
-      globalFilter: this.filterText(),
-    },
-    onGlobalFilterChange: (value) => this.filterText.set(value),
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: 10, 
-      },
-    },
+    manualPagination: true,
   }));
 
-  /**
-   * Actualiza el texto de búsqueda basado en el evento de entrada
-   * @param event Evento de entrada del usuario
-   */
-  updateSearch(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.filterText.set(inputElement.value);
+  constructor() {
+  }
+
+  // Navegación de página
+  goToNextPage() {
+    if (this.canNextPage()) {
+      this.onPageChange.emit({ 
+        page: this.currentPage() + 1, 
+        size: this.pageSize() 
+      });
+    }
+  }
+
+  goToPreviousPage() {
+    if (this.canPreviousPage()) {
+      this.onPageChange.emit({ 
+        page: this.currentPage() - 1, 
+        size: this.pageSize() 
+      });
+    }
+  }
+
+  changePageSize(newSize: number) {
+    this.onPageChange.emit({ 
+      page: 1, 
+      size: newSize 
+    });
   }
 }

@@ -5,7 +5,7 @@ import { inject, Injectable } from '@angular/core';
 import { ClientHttpAltaris } from '@app/lib/ClientHttpAltaris';
 // Interfaces
 import { IHotel } from '../interfaces/IHotel';
-import { IApiResponse } from '../interfaces/IApiResponse';
+import { IApiResponse, IApiResponsePg } from '../interfaces/IApiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +20,13 @@ export class HotelService {
    * @param size The number of items per page.
    * @returns An observable of the API response containing a list of hotels.
    */
-  getAll(page: number = 1, size: number = 10): Promise<IApiResponse<IHotel[]>> {
+  getAll(page: number = 1, size: number = 10): Promise<IApiResponsePg<IHotel[]>> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
 
     return firstValueFrom(
-      this.api.get<IApiResponse<IHotel[]>>(`${this.baseUrl}/all`, params)
+      this.api.get<IApiResponsePg<IHotel[]>>(`${this.baseUrl}/all`, params)
     );
   }
 

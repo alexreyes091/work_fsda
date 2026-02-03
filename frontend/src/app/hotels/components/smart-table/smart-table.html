@@ -1,23 +1,4 @@
 <div class="flex flex-col gap-4">
-  <div class="flex justify-between items-center bg-base-100 p-2 rounded-lg">
-    <div class="relative w-full max-w-xs">
-      <input 
-        type="text" 
-        placeholder="Buscar hotel, huésped o email..." 
-        class="input input-bordered w-full pr-10"
-        [value]="filterText()" 
-        (input)="updateSearch($event)" 
-      />
-      @if (filterText()) {
-        <button 
-          class="absolute right-2 top-3 btn btn-ghost btn-xs"
-          (click)="filterText.set('')">
-          ✕
-        </button>
-      }
-    </div>
-  </div>
-
   <div class="overflow-x-auto border border-base-300 rounded-box shadow-sm">
     <table class="table table-zebra w-full">
       <thead>
@@ -52,7 +33,7 @@
             <td [attr.colspan]="columns().length" class="text-center py-12">
               <div class="flex flex-col items-center opacity-40">
                 <span class="text-5xl">🔍</span>
-                <p class="mt-2 text-lg">No se encontraron resultados para "{{ filterText() }}"</p>
+                <p class="mt-2 text-lg">No se encontraron resultados</p>
               </div>
             </td>
           </tr>
@@ -64,34 +45,35 @@
 
 <div class="flex items-center justify-between mt-4 bg-base-100 p-2 rounded-lg border border-base-300">
   <div class="text-sm opacity-70">
-    Página {{ table.getState().pagination.pageIndex + 1 }} de {{ table.getPageCount() }}
+    Mostrando {{ (currentPage() - 1) * pageSize() + 1 }} - {{ Math.min(currentPage() * pageSize(), totalCount()) }} de {{ totalCount() }} resultados
   </div>
 
   <div class="join">
     <button 
       class="join-item btn btn-sm" 
-      (click)="table.previousPage()" 
-      [disabled]="!table.getCanPreviousPage()">
+      (click)="goToPreviousPage()" 
+      [disabled]="!canPreviousPage()">
       «
     </button>
     
     <button class="join-item btn btn-sm bg-base-200">
-      Página {{ table.getState().pagination.pageIndex + 1 }}
+      Página {{ currentPage() }} de {{ totalPages() }}
     </button>
 
     <button 
       class="join-item btn btn-sm" 
-      (click)="table.nextPage()" 
-      [disabled]="!table.getCanNextPage()">
+      (click)="goToNextPage()" 
+      [disabled]="!canNextPage()">
       »
     </button>
   </div>
 
   <select 
     class="select select-bordered select-sm"
-    (change)="table.setPageSize(+$any($event.target).value)">
-    @for (pageSize of [5, 10, 20]; track pageSize) {
-      <option [value]="pageSize" class="text-slate-700">Mostrar {{ pageSize }}</option>
+    [value]="pageSize()"
+    (change)="changePageSize(+$any($event.target).value)">
+    @for (size of [5, 10, 20]; track size) {
+      <option [value]="size" class="text-slate-700">Mostrar {{ size }}</option>
     }
   </select>
 </div>

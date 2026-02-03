@@ -18,6 +18,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages').then(m => m.Hotels),
             },
             {
+                path:'occupancy',
+                loadComponent: () => import('./pages').then(m => m.RoomOccupancy),
+            },
+            {
                 path: '', redirectTo: 'hotels', pathMatch: 'full'
             }
         ]

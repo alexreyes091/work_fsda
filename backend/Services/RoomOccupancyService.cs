@@ -13,39 +13,48 @@ namespace app.webapi.backoffice_viajes_altairis.Services
     {
         private readonly IRoomOccupancyRepository _occupancyRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IHotelRepository _hotelRepository;
         private readonly IMapper _mapper;
 
         public RoomOccupancyService(
             IRoomOccupancyRepository occupancyRepository,
             IRoomRepository roomRepository,
+            IHotelRepository hotelRepository,
             IMapper mapper)
         {
             _occupancyRepository = occupancyRepository;
             _roomRepository = roomRepository;
+            _hotelRepository = hotelRepository;
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<RoomOccupancyDto>>> GetOccupancyGridAsync(Guid roomId, DateTime startDate, DateTime endDate)
+        public async Task<Result<IEnumerable<RoomOccupancyDto>>> GetOccupancyGridAsync(Guid hotelId, DateTime startDate, DateTime endDate)
         {
-            Room? dataRoom = await _roomRepository.GetByIdAsync(roomId);
-            if (dataRoom == null)
-                return Result<IEnumerable<RoomOccupancyDto>>.Failure("Habitación no encontrada.", TypeResultResponse.NOT_FOUND.ToString());
+            Hotel? dataHotel = await _hotelRepository.GetByIdAsync(hotelId);
+            if (dataHotel == null)
+                return Result<IEnumerable<RoomOccupancyDto>>.Failure("Hotel no encontrada.", TypeResultResponse.NOT_FOUND.ToString());
 
+            var rooms = await _roomRepository.GetByHotelIdAsync(hotelId);
+            int totalHotelRooms = rooms.Sum(r => r.Quantity);
+            var roomIds = rooms.Select(r => r.Id).ToList();
 
-            IEnumerable<RoomOccupancy> occupancies = await _occupancyRepository.GetByRangeAsync(roomId, startDate, endDate);
+            IEnumerable<RoomOccupancy> occupancies = await _occupancyRepository.GetByRangeAsync(roomIds, startDate, endDate);
 
             // Grid para crear un estilo mapa de calor
             var dataGrid = new List<RoomOccupancyDto>();
             for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
             {
-                var existing = occupancies.FirstOrDefault(x => x.Date.Date == date);
+                // Sumamos lo ocupado en todas las habitaciones para esa fecha específica!
+                var totalOccupiedThatDay = occupancies
+                    .Where(x => x.Date.Date == date)
+                    .Sum(x => x.OccupiedCount);
 
                 dataGrid.Add(new RoomOccupancyDto
                 {
                     Date = date,
-                    OccupiedCount = existing?.OccupiedCount ?? 0,
-                    TotalRooms = dataRoom.Quantity,
-                    RoomName = dataRoom.Name
+                    OccupiedCount = totalOccupiedThatDay,
+                    TotalRooms = totalHotelRooms, 
+                    RoomName = dataHotel.Name 
                 });
             }
 

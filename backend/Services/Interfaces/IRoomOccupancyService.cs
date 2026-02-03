@@ -10,7 +10,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services.Interfaces
         /// <summary>
         /// Asynchronously retrieves the occupancy grid for a specified room within a given date range.
         /// </summary>
-        /// <param name="roomId">The unique identifier of the room for which occupancy data is requested.</param>
+        /// <param name="hotelId">The unique identifier of the room for which occupancy data is requested.</param>
         /// <param name="startDate">The start date of the range for which to retrieve occupancy information. Must be less than or equal to
         /// <paramref name="endDate"/>.</param>
         /// <param name="endDate">The end date of the range for which to retrieve occupancy information. Must be greater than or equal to
@@ -18,7 +18,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services.Interfaces
         /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="Result{T}"/>
         /// wrapping a collection of <see cref="RoomOccupancyDto"/> objects representing occupancy data for each day in
         /// the specified range.</returns>
-        Task<Result<IEnumerable<RoomOccupancyDto>>> GetOccupancyGridAsync(Guid roomId, DateTime startDate, DateTime endDate);
+        Task<Result<IEnumerable<RoomOccupancyDto>>> GetOccupancyGridAsync(Guid hotelId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Asynchronously determines whether the specified room is available for the given date range.

@@ -15,7 +15,7 @@ namespace app.webapi.backoffice_viajes_altairis.Data.Interfaces
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of <see
         /// cref="RoomOccupancy"/> instances for the specified room and time range. The collection will be empty if no
         /// records are found.</returns>
-        public Task<IEnumerable<RoomOccupancy>> GetByRangeAsync(Guid roomId, DateTime start, DateTime end);
+        public Task<IEnumerable<RoomOccupancy>> GetByRangeAsync(IEnumerable<Guid> roomId, DateTime start, DateTime end);
 
         /// <summary>
         /// Asynchronously determines whether the specified room is available for the given date range and can
