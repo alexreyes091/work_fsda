@@ -40,7 +40,7 @@ namespace app.webapi.backoffice_viajes_altairis.Services
             if(!validationResult.IsValid)
             {
                 string errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-                return Result<ReservationDto>.Failure($"Validación fallida: {errors}", "ValidationError");
+                return Result<ReservationDto>.Failure($"Validación fallida: {errors}", TypeResultResponse.VALIDATION_ERROR.ToString());
             }
 
             // Se valida la disponibilidad de la habitación

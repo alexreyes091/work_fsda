@@ -37,6 +37,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<ReservationValidator>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IRoomOccupancyRepository, RoomOccupancyRepository>();
 // Services
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
@@ -70,5 +71,6 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.MapHotelEndpoints();
 app.MapRoomEndpoints();
+app.MapRoomOccupancyEndpoints();
 app.MapReservationEndpoints();
 app.Run();
