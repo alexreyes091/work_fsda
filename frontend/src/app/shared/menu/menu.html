@@ -1,0 +1,103 @@
+<div class="drawer lg:drawer-open">
+  <input id="my-drawer-4" type="checkbox" class="drawer-toggle" checked/>
+  <div class="drawer-content">
+    <!-- Navbar -->
+    <nav class="navbar w-full bg-base-300">
+      <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
+        <!-- Sidebar toggle icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
+      </label>
+      <span class="font-bold text-slate-900">{{ titleMenu() }}</span>
+      <!-- <div class="px-4">Navbar Title</div> -->
+    </nav>
+
+    <!-- Page content here -->
+    <router-outlet></router-outlet>
+
+  </div>
+  <div class="drawer-side is-drawer-close:overflow-visible bg-neutral ">
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-15 is-drawer-open:w-64">
+      <!-- Sidebar content here -->
+      <ul class="menu w-full grow">
+
+        <!-- LOGOTIPO -->
+        <div class="avatar m-1 mb-5 self-center">
+          <div class="ring-gray-100 ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-2">
+            <img class="w-8" src="images/logo-altaris.svg" />
+          </div>
+          <span class="is-drawer-close:hidden ml-3 mt-2 text-xl text-slate-800 font-bold">ALTARIS</span>
+        </div>
+        <hr class="text-slate-300 mb-4">
+
+        <!-- List item -->
+        <li class="my-2">
+          <button 
+            routerLink="hotels" routerLinkActive="active-link"
+            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard" routerLink="dashboard">
+            <!-- Dashboard icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 11h4a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-2a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-6a1 1 0 0 1 1 -1z" /><path d="M21 12v6a3 3 0 0 1 -2.824 2.995l-.176 .005h-6a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1z" /><path d="M18 3a3 3 0 0 1 2.995 2.824l.005 .176v2a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h6z" /><path d="M9 4v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h2a1 1 0 0 1 1 1z" /></svg>
+            <span class="is-drawer-close:hidden">Dashboard</span>
+          </button>
+        </li>
+
+        <!-- List item -->
+        <li class="my-2">
+          <a
+            routerLink="occupancy" routerLinkActive="active-link"
+            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Disponibilidad">
+            <!-- Hoteles icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" /><path d="M16 3l0 4" /><path d="M8 3l0 4" /><path d="M4 11l16 0" /><path d="M8 15h2v2h-2l0 -2" /></svg>
+            <span class="is-drawer-close:hidden">Disponibilidad</span>
+          </a>
+        </li>
+
+        <!-- List item -->
+        <li class="my-2">
+          <a
+            routerLink="reservations" routerLinkActive="active-link"
+            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" 
+            data-tip="Reservas">
+            <!-- Reservation icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-reserved-line"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 20h6" /><path d="M12 14v6" /><path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -6" /><path d="M9 9h6" /></svg>
+            <span class="is-drawer-close:hidden">Reservas</span>
+          </a>
+        </li>
+
+        <!-- List item -->
+        <li class="my-2">
+          <a
+            routerLink="hotels" routerLinkActive="active-link"
+            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" 
+            data-tip="Hoteles">
+            <!-- Hoteles icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-buildings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" /><path d="M16 8h2c1 0 2 1 2 2v11" /><path d="M3 21h18" /><path d="M10 12v.01" /><path d="M10 16v.01" /><path d="M10 8v.01" /><path d="M7 12v.01" /><path d="M7 16v.01" /><path d="M7 8v.01" /><path d="M17 12v.01" /><path d="M17 16v.01" /></svg>
+            <span class="is-drawer-close:hidden">Hoteles</span>
+          </a>
+        </li>
+
+         <!-- List item -->
+        <li class="my-2">
+          <a
+            routerLink="rooms" routerLinkActive="active-link"
+            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" 
+            data-tip="Habitaciones">
+            <!-- Hoteles icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-door"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 12v.01" /><path d="M3 21h18" /><path d="M6 21v-16a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v16" /></svg>
+            <span class="is-drawer-close:hidden">Habitaciones</span>
+          </a>
+        </li>
+
+        <!-- Footer btn -->
+        <div class="mt-auto w-full p-4 border-t border-slate-300">
+        <button class="flex items-center space-x-3 hover:text-primary transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-logout">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" />
+          </svg>
+          <span class="is-drawer-close:hidden font-medium">Cerrar Sesión</span>
+        </button>
+      </div>
+      </ul>
+    </div>
+  </div>
+</div>
