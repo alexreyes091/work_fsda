@@ -1,0 +1,88 @@
+<section class="flex flex-col lg:flex-row gap-4 mb-6 p-5 justify-between items-start lg:items-center">
+    <!-- Header Section -->
+    <div class="flex-1">
+        <h1 class="font-bold text-2xl flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Reservas
+        </h1>
+        <p class="label text-base-content/70">Administra todas las reservas de tus hoteles</p>
+    </div>
+
+    <!-- Actions Section -->
+    <div class="flex flex-wrap gap-3 items-center">
+        <!-- Filter Dropdown -->
+        <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-md btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filtros
+            </label>
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-2">
+                <li><a>Todas</a></li>
+                <li><a>Pendientes</a></li>
+                <li><a>Confirmadas</a></li>
+                <li><a>En curso</a></li>
+                <li><a>Finalizadas</a></li>
+                <li><a>Canceladas</a></li>
+            </ul>
+        </div>
+
+        <!-- New Reservation Button -->
+        <button class="btn btn-neutral btn-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+            <span>Nueva Reserva</span>
+        </button>
+    </div>
+</section>
+
+<!-- Stats Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-5 mb-6">
+    <!-- Stat: Total Reservas -->
+    <div class="stat bg-base-100 shadow-sm rounded-lg border border-base-200">
+        <div class="stat-figure text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="stat-title">Total Reservas</div>
+        <div class="stat-value text-primary text-2xl">{{ totalCount() }}</div>
+        <div class="stat-desc">En el sistema</div>
+    </div>
+
+    <!-- Stat: Pendientes -->
+    <div class="stat bg-base-100 shadow-sm rounded-lg border border-base-200">
+        <div class="stat-figure text-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-title">Pendientes</div>
+        <div class="stat-value text-warning text-2xl">--</div>
+        <div class="stat-desc">Por confirmar</div>
+    </div>
+
+    <!-- Stat: Activas -->
+    <div class="stat bg-base-100 shadow-sm rounded-lg border border-base-200">
+        <div class="stat-figure text-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="stat-title">Activas</div>
+        <div class="stat-value text-success text-2xl">--</div>
+        <div class="stat-desc">En curso</div>
+    </div>
+
+    <!-- Stat: Hoy -->
+    <div class="stat bg-base-100 shadow-sm rounded-lg border border-base-200">
+        <div class="stat-figure text-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-title">Hoy</div>
+        <div class="stat-value text-info text-2xl">--</div>
+        <div class="stat-desc">Check-ins</div>
+    </div>
+</section>
+
+<!-- Smart Table -->
+<app-smart-table 
+    [data]="reservationsList()" 
+    [columns]="columns"
+    [totalCount]="totalCount()" 
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    (onPageChange)="onTablePageChange($event)">
+</app-smart-table>

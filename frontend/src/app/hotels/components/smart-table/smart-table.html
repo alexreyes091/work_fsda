@@ -1,0 +1,79 @@
+<div class="flex flex-col gap-4">
+  <div class="overflow-x-auto border border-base-300 rounded-box shadow-sm">
+    <table class="table table-zebra w-full">
+      <thead>
+        @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+          <tr>
+            @for (header of headerGroup.headers; track header.id) {
+              <th class="bg-base-200 text-slate-700 font-bold uppercase text-xs">
+                @if (!header.isPlaceholder) {
+                  <ng-container *flexRender="header.column.columnDef.header; props: header.getContext(); let headerContent">
+                    {{ headerContent }}
+                  </ng-container>
+                }
+              </th>
+            }
+          </tr>
+        }
+      </thead>
+      
+      <tbody>
+        @for (row of table.getRowModel().rows; track row.id) {
+          <tr class="hover transition-colors">
+            @for (cell of row.getVisibleCells(); track cell.id) {
+              <td class="py-3">
+                <ng-container *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let cellContent">
+                  {{ cellContent }}
+                </ng-container>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="columns().length" class="text-center py-12">
+              <div class="flex flex-col items-center opacity-40">
+                <span class="text-5xl">🔍</span>
+                <p class="mt-2 text-lg">No se encontraron resultados</p>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="flex items-center justify-between mt-4 bg-base-100 p-2 rounded-lg border border-base-300">
+  <div class="text-sm opacity-70">
+    Mostrando {{ (currentPage() - 1) * pageSize() + 1 }} - {{ Math.min(currentPage() * pageSize(), totalCount()) }} de {{ totalCount() }} resultados
+  </div>
+
+  <div class="join">
+    <button 
+      class="join-item btn btn-sm" 
+      (click)="goToPreviousPage()" 
+      [disabled]="!canPreviousPage()">
+      «
+    </button>
+    
+    <button class="join-item btn btn-sm bg-base-200">
+      Página {{ currentPage() }} de {{ totalPages() }}
+    </button>
+
+    <button 
+      class="join-item btn btn-sm" 
+      (click)="goToNextPage()" 
+      [disabled]="!canNextPage()">
+      »
+    </button>
+  </div>
+
+  <select 
+    class="select select-bordered select-sm"
+    [value]="pageSize()"
+    (change)="changePageSize(+$any($event.target).value)">
+    @for (size of [5, 10, 20]; track size) {
+      <option [value]="size" class="text-slate-700">Mostrar {{ size }}</option>
+    }
+  </select>
+</div>

@@ -1,0 +1,43 @@
+
+<section class="card bg-base-100 shadow-sm border border-base-200">
+    <div class="card-body p-4">
+        <h3 class="card-title text-sm flex items-center gap-2">
+        <span class="i-lucide-info text-info"></span>
+        Detalle por tipo - Próximos {{ nextDaysCount}} días
+        </h3>
+        <!-- Proximos 14 dias -->
+        <div class="overflow-x-auto">
+        <table class="table table-xs w-full">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                @for (day of nextFortnight(); track day) {
+                <th class="text-[9px] p-1 text-center opacity-60">
+                    {{ day | date: 'EE d' }}
+                </th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @for (room of roomOccupancy(); track room.typeName) {
+                <tr>
+                <td class="font-bold text-[10px] min-w-[80px]">
+                    {{ room.typeName }}
+                    <div class="text-[8px] opacity-50">{{ room.total }} hab.</div>
+                </td>
+                @for (occ of room.dailyOccupancy; track $index) {
+                    <td class="p-0.5">
+                    <div 
+                        class="w-6 h-8 rounded flex items-center justify-center text-[10px] font-bold"
+                        [class]="occ.percentage >= 80 ? 'bg-red-500 text-white' : (occ.percentage >= 50 ? 'bg-yellow-400 text-black' : 'bg-green-500 text-white')">
+                        {{ occ.available }}
+                    </div>
+                    </td>
+                }
+                </tr>
+            }
+            </tbody>
+        </table>
+        </div>
+</div>
+</section>
