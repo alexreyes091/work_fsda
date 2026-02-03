@@ -27,16 +27,18 @@ services:
       - "8080:8080"
       - "8081:8081"
 
-    # Frontend Angular 21
-    frontend:
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile
-      container_name: altairis_front
-      ports:
-        - "4200:80"
-      depends_on:
-        - backend
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: altairis_front
+    environment:
+      - API_URI=${API_URI}
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

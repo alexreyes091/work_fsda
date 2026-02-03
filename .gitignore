@@ -303,7 +303,6 @@ __pycache__/
 # End of https://www.toptal.com/developers/gitignore/api/angular,aspnetcore
 
 # Others to ignore
-.env
 .vscode/
 .env.local
 env.auth

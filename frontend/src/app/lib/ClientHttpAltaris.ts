@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientHttpAltaris {
-
-  private apiUrl: string = 'https://localhost:7011/api/v1';
+  private apiUrl: string = environment.apiUrl;
   private http = inject(HttpClient);
   
   get<T>(endpoint: string, params?: HttpParams) {
